@@ -1,0 +1,152 @@
+#######__Java_script
+
+1.var more_jobs_link=document.getElementById("more_jobs_link");   ///get attr element obj
+2.var more_jobs_link_value=more_jobs_link.getAttribute("href");  ///get attribute value
+3.more_jobs_link.setAttribute('href','new_value');              ///set element value
+4.window.location="http://www.tutorialspoint.com";             /// redirect to another page
+5.var url = location.protocol + '//' + location.host + '/Dash_board/offercount';     -------my base url
+6.var pathname = window.location.pathname;                   /// Returns path only
+7.var url      = window.location.href;                      /// return full url
+8.document.getElementById('gadget_url').value = '';        /// set value
+document.getElementById("myBtn").addEventListener("click", displayDate);  /// add event listner to id
+9.---(((((add this to select menu--->onChange="get_donates(this);"))))----  alert(sel.options[sel.selectedIndex].text);   ////get value of option value
+10.var $variable = $('.ui-selected').html(); 
+ 11.document.getElementById("body").innerHTML=data;   /// replace value  with jquery
+12.$( "select.foo" ).val();                          ///get value with jquery
+->var v=document.getElementById("sub_regions_menu").value /// get value with javascript
+13.$('a').on('click', 
+function()
+{
+  
+start_url=$(this).attr("href");   
+  
+
+});
+                                               ///get url of ant clicked linked in my page
+
+14.document.addEventListener('click', function (event) {
+	event.preventDefault();    
+	
+   //alert(event.target.href);
+	
+  // alert($(event.target).text());  
+ // alert($(event.target).href);  
+
+}, true);                                     ///get url of ant clicked linked in my page using event ?????
+
+
+
+---------------------------------------------------------------------------------------------------------------------------
+######__Print Jasno obj
+
+console.log( JSON.stringify(jason obj, null, "    ") );
+------------------------------------------------------------------------------------------------------------------------#######################
+
+
+------------------------------------------------------------------------------------------------------------------------#######################
+######__submit form from external_link
+
+var form = document.getElementById("form-id");
+document.getElementById("your-id").addEventListener("click", function () {
+  form.submit();
+});
+------------------------------------------------------------------------------------------------------------------------#######################
+######__Get your position 
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition, showError);
+                } else {
+                    console.log("Geolocation is not supported by this browser.");
+                }
+            }
+
+
+            function showPosition(position) {
+                var GEOCODING = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + position.coords.latitude + '%2C' + position.coords.longitude + '&language=en';
+                // var GEOCODING = 'http://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&sensor=true';
+
+
+                $.getJSON(GEOCODING).done(function (location) {
+
+
+                    $('#country').html(location.results[0].address_components[4].long_name);
+                    $('#state').html(location.results[0].address_components[1].long_name);
+                    $('#city').html(location.results[1].address_components[0].long_name);
+                    $('#address').html(location.results[0].formatted_address);
+                    //$('#latitude').html(position.coords.latitude);
+                    //$('#longitude').html(position.coords.longitude);
+                })
+
+
+            }
+
+
+            function showError(error) {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        console.log(  "User denied the request for Geolocation.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        console.log( "Location information is unavailable.");
+                        break;
+                    case error.TIMEOUT:
+                        console.log(  "The request to get user location timed out.");
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        console.log(  "An unknown error occurred.");
+                        break;
+                }
+            }
+------------------------------------------------------------------------------------------------------------------------#################################
+######__Loop in java_script
+
+            var pathname = window.location.pathname.split("/");
+
+
+            for (var a in pathname)
+            {
+                       
+                if (pathname[a] == 'search')
+                {
+                    
+                    getLocation();
+                    break;
+                }
+            }
+
+------------------------------------------------------------------------------------------------------------------------#######################
+
+
+######__Validate muilty[] select  menu
+<?php 
+$i=0;
+$options=array();                        
+echo '<select name="farea[]" multiple="multiple">';
+foreach($jobs_eng as $key=>$value)
+{                     
+echo "<option value='".$value[categoryid]."' ".set_select('farea[]',$value[categoryid])." >".$value[categoryen]."</option>";
+}
+echo "</select>";
+
+?>
+------------------------------------------------------------------------------------------------------------------------#######################
+
+
+#___Listen for any clicked Element in my page
+
+document.addEventListener('click', function (event) {
+    var anchor = event.target.closest("a");	
+    // alert( anchor.getAttribute('href'));
+}, true);
+
+------------------------------------------------------------------------------------------------------------------------#######################
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">   
+
+<input type='text' type='date' name='search_data' id='search_date_id' value='<?php echo date('Y-m-d'); ?>' placeholder="date" >
+     $(document).ready(function () {
+                $("#search_date_id").datepicker();
+                
+            });
+         
+
+------------------------------------------------------------------------------------------------------------------------#######################

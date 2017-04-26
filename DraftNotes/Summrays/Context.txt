@@ -1,0 +1,359 @@
++Contexts
+=========
+
+are Android specific scoping objects that extend the android.content.Context class.
+There is a sort of global context - the Application Context - which can be used to 'get global state', 
+and then there are usually one or more 'smaller-scoped contexts' which 'hold more specific state information' --->(like the Activity). 
+
+In general:-
+you do not really need to worry about all the different levels and methods, you just need to get a Context somehow, 'Usually the smallest scoped one', 
+and use it. And that is usually by calling the Activitys --->'getContext()'.
+
+The context it self will handle delegating or searching broader contexts if it doesn not have the information you need.
+So you generally do not need getBaseContext() (though if you were to write a Context implementation yourself, you might). 
+
+The ApplicationContext is used when you might need access to a context but you need to make sure it has a long enough life.
+For example, the Activity is a Context,
+and its getContext() method usually returns itself.
+But if you have a Class which uses the context but sticks around for longer than the life of the Activity 
+(for example )
+it might be used in a Service or is something that gets passed from one Activity to the next then using the Activity as a context is not the best idea, 
+it could cause memory leaks or unexpected behavior.
+So in those cases you need a context that lasts the lifetime of the application,
+and that would be what getApplicationContext() returns.
+
+
+
+--->So far, what did i understand is that Context holds the Activity objects and tells to another activity Where is it in the memory.
+
+Not quite. An Activity is a Context. And a Context holds information about the applications state, access, permissions, databases, file system, assets, 
+and things like that.  
+
+--->Bigger context cover more information about Application.
+
+Depends on what you mean about 'bigger'. Broader contexts, like Application, 
+usually have access to less information, or the same information but in a harder-to-access manner.
+As you get to narrower contexts like the Activity, the Context knows a bit more about what is currently happening, 
+so it might hold more information about the specific task, or make it easier to access information more pertinent to the current activity.
+It is called 'narrower' because it has a shorter life span and covers a smaller range of possibilities. 
+But it usually has access to all the information that broader contexts have. 
+For example, the Application context might have information about what databases are defined for the application, 
+and what assets are available. It does not necessarily know about the current displayed layout.
+But the Activity context does know about the currently displayed layout, so it can be used to create views that are properly initialized.
+The Activity context usually knows all the stuff the Application does, and if it does not know it itself, it delegates to the Application to get it. 
+
+
+
+--->Using getApplicationContext for onClickListener or inner Class is unnecessary or Not? 
+It is more like filling bathtub for brushing teeth.
+
+Not sure about 'necessary' or not... 'but most likely you want the--->Activitys context',
+because the narrower scope--->'gives you access to what is more likely to be needed'.
+
+I do not think the analogy to the excessive waste in water is applicable - the Application context exists, has information,
+and you using it does not change its size or content. Nor does it give you access to an excess of information.
+It just might not be the right scope to look at... or it might be depending on needs. 
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Context Explanation_2 :-
+=====================
+Not all Context instances are created equal.  Depending on the Android application component, the Context you have access to varies slightly
+
+1-Application      ---> is a singleton instance running in your application process.
+  It can be accessed via methods like getApplication() from an Activity or Service, And 'getApplicationContext()' from any other object that 'inherits' from Context. 
+
+  Regardless of where or how it is accessed, you will always receive the same 'instance' from within your process.
+  ^_^--->So( as you have the Referane of the context your can apply any Contexts_method to receive specific Value)(true/false).
+
+2-Activity/Service ---> inherit from ContextWrapper which implements the same API, but proxies all of its method calls to a hidden internal Context instance,
+  also known as its base context.  Whenever the framework creates a new Activity or Service instance, 
+  it also creates a new ContextImpl instance to do all of the heavy lifting that either component will wrap.  
+  (============>Each Activity or Service, and their corresponding base context, are unique 'per-instance'<===================================)
+
+
+Saved References :-
+====================
+The first issue we need to address comes from saving a reference to a Context in an object or Class that has a lifecycle that 'Extends' beyond that of the instance you saved. 
+For example:-
+creating a custom singleton that requires a Context to load resources or access a ContentProvider,
+and saving a reference to the current Activity or Service in that singleton
+-------------------
+---Bad Singleton---
+-------------------
+public class CustomManager { ///--->custom singleton classs
+    private static CustomManager sInstance;
+ 
+    public static CustomManager getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new CustomManager(context);
+        }
+ 
+        return sInstance;
+    }
+ 
+    private Context mContext;
+ 
+    private CustomManager(Context context) {   ///--->saving a reference to the current Activity or Service 
+        mContext = context;
+    }
+}
+
+----->The problem here is we don’t know where that Context came from (Activity or a Service).
+----->It is not safe to hold a reference to the object if it ends up being an Activity or a Service.
+----->If this Context were an Activity,we would effectively hold hostage in  Memory all the views and other potentially large objects associated with it; creating a leak.
+
+================
+----------------------
+---Better Singleton---
+----------------------
+
+public class CustomManager {
+    private static CustomManager sInstance;
+ 
+    public static CustomManager getInstance(Context context) {
+        if (sInstance == null) {
+            //Always pass in the Application Context
+            sInstance = new CustomManager(context.getApplicationContext());
+        }
+ 
+        return sInstance;
+    }
+ 
+    private Context mContext;
+ 
+    private CustomManager(Context context) {
+        mContext = context;
+    }
+}
+
+--->Now it doesn’t matter where our Context came from, because the reference we are holding is safe.  
+    The application context is itself a singleton,so we aren’t leaking anything by creating another static reference to it
+
+--->So why can’t we always just reference the application context? Take the middleman out of the equation, as it were, and never have to worry about creating leaks? 
+    The answer, as I alluded to in the introduction, is because 'one Context is not equal to another'
+
+    =============================================================(Duplicate)
+    Contexts
+=========
+
+are Android specific scoping objects that extend the android.content.Context class.
+There is a sort of global context - the Application Context - which can be used to 'get global state', 
+and then there are usually one or more 'smaller-scoped contexts' which 'hold more specific state information' --->(like the Activity). 
+
+In general:-
+you do not really need to worry about all the different levels and methods, you just need to get a Context somehow, 'Usually the smallest scoped one', 
+and use it. And that is usually by calling the Activitys --->'getContext()'.
+
+The context it self will handle delegating or searching broader contexts if it doesn not have the information you need.
+So you generally do not need getBaseContext() (though if you were to write a Context implementation yourself, you might). 
+
+The ApplicationContext is used when you might need access to a context but you need to make sure it has a long enough life.
+For example, the Activity is a Context,
+and its getContext() method usually returns itself.
+But if you have a Class which uses the context but sticks around for longer than the life of the Activity 
+(for example )
+it might be used in a Service or is something that gets passed from one Activity to the next then using the Activity as a context is not the best idea, 
+it could cause memory leaks or unexpected behavior.
+So in those cases you need a context that lasts the lifetime of the application,
+and that would be what getApplicationContext() returns.
+
+
+
+--->So far, what did i understand is that Context holds the Activity objects and tells to another activity Where is it in the memory.
+
+Not quite. An Activity is a Context. And a Context holds information about the applications state, access, permissions, databases, file system, assets, and things like that.  
+
+--->Bigger context cover more information about Application.
+
+Depends on what you mean about 'bigger'. Broader contexts, like Application, 
+usually have access to less information, or the same information but in a harder-to-access manner.
+As you get to narrower contexts like the Activity, the Context knows a bit more about what is currently happening, 
+so it might hold more information about the specific task, or make it easier to access information more pertinent to the current activity.
+It is called 'narrower' because it has a shorter life span and covers a smaller range of possibilities. 
+But it usually has access to all the information that broader contexts have. 
+For example, the Application context might have information about what databases are defined for the application, 
+and what assets are available. It does not necessarily know about the current displayed layout.
+But the Activity context does know about the currently displayed layout, so it can be used to create views that are properly initialized.
+The Activity context usually knows all the stuff the Application does, and if it does not know it itself, it delegates to the Application to get it. 
+
+
+
+--->Using getApplicationContext for onClickListener or inner Class is unnecessary or Not? 
+It is more like filling bathtub for brushing teeth.
+
+Not sure about 'necessary' or not... 'but most likely you want the--->Activitys context',
+because the narrower scope--->'gives you access to what is more likely to be needed'.
+
+I do not think the analogy to the excessive waste in water is applicable - the Application context exists, has information,
+and you using it does not change its size or content. Nor does it give you access to an excess of information.
+It just might not be the right scope to look at... or it might be depending on needs. 
+
+
+--->getContext()  :
+--->vs getApplicationContext() :
+{
+So if you want the Application Class you registered in the Manifest, 
+you should never call getApplicationContext() and cast it to your application,
+because it may not be the application instance (which you obviously experienced with the test framework).
+--->getApplication() is only available on the Activity Class and in the Service class,
+--->getApplicationContext() is declared in the Context class.
+}
+
+this - return self reference
+getContext() - return Context
+getActivity() - return Activity
+
+
+Context.
+========
+
+
+
+--->Each Activity is a Context and each View needs a Context so it can Retrieve whatever resources it needs (including things like system-defined resources).
+--->Context is a reference to the current object as this. Also context allows access to information about the application environment.
+--->It is like access of android activity to the apps resource
+    As the name suggests, its the context of current state of the--->(application/object).
+--->It tells the compiler to which context activity or application your current belongs which you want to show. 
+-----Mostly we give the context of Activity while initializing the view.
+--->Note : Activity extends Context. Context not a Activity.
+
+
+((((((_____ getApplicationContext()  VS  getActivity()_____))))))
+
+
+
+They are both instances of Context
+But the application instance is tied to the lifecycle of the Application,
+while the Activity instance is tied to the lifecycle of an Activity.
+
+------------------------------------------------------------------------
+If you read the docs at getApplicationContext it notes that 
+-----------
+you should only use--->this to get your current activity (Instance/context).
+--->but If you need a context whose lifecycle is separate from the current context.
+----- you can Cast what Returns from  getApplicationContext() to any Activity your are Not currently Running it. 
+But in general, use the ActivityContext unless you have a good reason not to.
+----------------------------------------------------------------------------
+
+
+--->The difference is the scope. 
+Your Application_context will be valid far longer than, say,an Activity_context
+because the activity may only be in use for a very short time, 
+while your Application may consist of many Activities. 
+Your Activity Context will be valid for at least as long as the duration that begins when the first activity is started 
+and ends when the last activity. They are all Contexts, 
+but one is longer lasting and doesn not change, but others are short-lived, and different instances may have different Contexts.
+
+In other words, getApplication() is guaranteed to return an Application object, 
+         while  getApplicationContext() is free to return a proxy instead.
+
+
+This                            --->refers to the context of the current activity.
+
+Class.this                      --->when you  have nested classes, you can use Class.this to disambiguate which this you are referencing.
+
+GetActivity()                   --->getActivity() is used for fragment. For activity, wherever you can use 'this', 
+                                ------you can replace the 'this' in fragment in similar cases with 'getActivity()'.
+                                --->its Return the activity object you have created or worked on (Self_Conclotion)
+
+View.getContext()               ---> Returns the context the (View) is currently running in. Usually the currently active Activity.
+                                -----"this" and getContext() both are same
+                                     "this" and getContext() may not always same (e.g) in Activity class, you can use this because Activity inherits from Context
+                                      but method getContext() is not in Activity class
+                                      You can not use this in an inner Class of an Activity, but you can use getContext()
+
+GetApplication()                ---> return an Application object(Longer) 
+                                -----Returns the context for the entire application
+
+Activity.getApplicationContext()---> Returns the context for the entire application (the process all the Activities are running inside of).
+                                ---> Logical implementation is to return the global Application object, 
+                                     Use this instead of the current Activity context 
+                                ---> Which can be used to get global state     
+                                
+
+ContextWrapper.getBaseContext() ---> If you need access to a Context from within another context, you use a ContextWrapper. 
+                                    The Context referred to from inside that ContextWrapper
+                                    is accessed via getBaseContext() --->check for fagment example
+                                --->should not be used to get current Context,
+                                 ----just use Context instead of it which is associated with the activity and could possible be destroyed when the activity is destroyed.
+
+---------------------
+getApplicationContext() Application context is associated with the Applicaition and will always be the same throughout the life cycle.
+
+
+getApplication() is available to Activity and Services only. Although in current Android Activity and Service implementations,
+getApplication() and getApplicationContext() return the same object,
+there is no guarantee that this will always be the case (for example, in a specific vendor implementation).
+So if you want the Application Class you registered in the Manifest, you should never call getApplicationContext() and cast it to your application,
+because it may not be the application instance (which you obviously experienced with the test framework).
+----------------------
+
+
+==================================================================================================================================================================
+
+
+
+Getting activity from context in android ??
+
+
+
+There are two different contexts in Android. One for your application (Let`s call it the BIG one) and one for each view (let`s call it the activity context).
+
+A linearLayout is a view, so you have to call the activity context. To call it from an activity, simply call "this". So easy isn`t it?
+
+When you use
+
+this.getApplicationContext();
+You call the BIG context, the one that describes your application and cannot manage your view.
+
+A big problem with Android is that a context cannot call your activity. That`s a big deal to avoid this when someone begins with the Android development. You have to find a better way to code your class (or replace "Context context" by "Activity activity" and cast it to "Context" when needed).
+
+Regards.
+
+Just to update my answer. The easiest way to get your Activity context is to define a static instance in your Activity. For example
+
+public class DummyActivity extends Activity
+{
+    public static DummyActivity instance = null;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        // Do some operations here
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        instance = this;
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        instance = null;
+    }
+}
+And then, in your Task, Dialog, View, you could use that kind of code to get your Activity context:
+
+if (DummyActivity.instance != null)
+{
+    // Do your operations with DummyActivity.instance
+}
+
+
+===
+
+
+---->Context may be an Application, a Service, an Activity, and more.
+
+Normally the context of Views in an Activity is the Activity itself so you may think you can just cast this Context to Activity but actually you can`t always do it, because the context can also be a ContextThemeWrapper in this case.
+
+ContextThemeWrapper is used heavily in the recent versions of AppCompat and Android (thanks to the android:theme attribute in layouts) so I would personally never perform this cast.
+
+So short answer is: you can`t reliably retrieve an Activity from a Context in a View. Pass the Activity to the view by calling a method on it which takes the Activity as parameter.

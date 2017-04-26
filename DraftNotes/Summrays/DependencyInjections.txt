@@ -1,0 +1,465 @@
+
+Dependency Injection
+=====================
+
+'The power of dependency injection shines with (sticking with the coffee analogy) if you now want to make cappuccino which requires or depends on some coffee input.
+ The recipe for the cappuccino can be based on the flexible coffee recipe.'
+
+'Yet another special drink can also be made which requires or depends on cappuccino. So that means three layers of dependencies. With Dependency Injection pattern, the generic ingredients, 
+ will be replaced (or injected) with concrete ingredients by the bartender  just in time before serving the coffee.'
+
+---->With Dependency Injection pattern,
+----- the generic ingredients, will be replaced (or injected) with concrete ingredients by the bartender  just in time before serving the coffee.
+---->Dependency injection refers to a set of techniques used for construction and/or initialization of composite objects in Object Oriented Programming.
+
+---->Dependency injection : take dependencies of (service Class)  and passing it to client class
+                            so the Client Class will not Intialize New obj of service every time he need it
+
+
+---->Basically, instead of having your objects creating a dependency or asking a factory object to make one for them,
+	 you pass the needed dependencies in to the 'constructor' or via 'property setters', 
+	 and you make it somebody elses problem (an object further up the dependency graph, or a dependency injector that builds the dependency graph). 
+	 A dependency as I am using it here is      'any other object' the 'current object' ----> needs to hold a reference to.
+
+
+---->Correct usage of dependency injection is that --->the Codebase can be divided into Two disjoint sets of Classes 
+                                                       1.Functional set: set of classes that encapsulate application’s functionality
+                                                       2.Factory    set: set of classes that encapsulate details of how objects from functional set should be constructed
+
+---->Since the above sets of classes are Disjoint
+     Objects that encapsulate application’s functionality  mustn’t, 
+     by definition, construct other objects from functional set. 
+
+----->Dependency injection techniques represent a set of rules and practices that aim at achieving such a separation of concerns.
+
+---->Dependent Class ---> When one Class from functional set Depends on another Class from functional set in order to Perform its function
+---->Service Class   --->whereas Dependent Class depends on
+
+---->In context of dependencies between classes,     
+     we can say that Dependent Class is a client, 
+     whereas the Class upon which the client depends is a service (not to confuse with Android Service class). 
+     This terminology will be used throughout  
+
+---->Top level components of Android application ----> are the best candidates for becoming the aforementioned interfaces.
+     When I say “top level components” I mean: Application, Activity, Service, ContentProvider and Fragme
+
+
+Dependency story :
+====================
+
+--->It all started with one Class depanding on other Class as Dependent Class ---->Class A
+                                                              Service Class   ---->Class B
+
+what is the best ways for (Class A ) to use Method of (Class B)                                                             
+1.we can create Class A inside Class B
+2.we can fetch from external resource(DataBase/Cloud,...)
+3.we can get (Class B) as an Arguments for your method or constructor inside Class A.
+
+
+How Dependent Injection Rule :-
+====================================
+
+so insted of the three or may more of three steps above Let’s somebody else do this job
+
+Now (Class A ) will Rely on thirdPart to supply the (right Obj) At the (right Time).
+
+
+
+
+Dependency injection frameworks:
+=====================================
+Dependency injection frameworks are third party libraries that assist in performing dependency injection. 
+Please note the “assist” word – frameworks are not required for dependency injection, but simply make it easier to perform dependency injection in some cases.
+
+The most popular dependency injection frameworks for Android today are Dagger 2 (originally created by Square, now being maintained by Google) and RoboGuice (Google).
+it is enough to know that both above dependency injection frameworks are 'annotation based', 
+and that the following code states that mSomeService member can be injected using dependency injection framework after instantiation of SomeClient object:
+
+public class SomeClient {
+    @Inject SomeService mSomeService;
+ 
+    public SomeClient() {}
+ 
+    public void doSomething() {
+        mSomeService.doSomething();
+    }    
+}
+
+
+
+Dependency injection in Android best practices:
+================================================
+
+Use constructor injection wherever possible:
+Constructor injection simply means that the client receives a reference to the service as constructor parameter. 
+
+So, instead of this:
+
+public class SomeClient {
+    private SomeService mSomeService; 
+ 
+    public SomeClient(SomeService someService) {
+        mSomeService = someService;
+    }
+
+
+do this:
+
+public class SomeClient {
+    @Inject SomeService mSomeService; // will be injected using dependency injection framework
+ 
+    public SomeClient() {}
+}    
+
+
+
+Advantages of constructor injection over injection using a framework:
+==============================================================================
+1.Client does not depend on dependency injection framework and its annotations
+2.Client’s API reflects all its dependencies
+3.Client can be unit tested as “black box” – no need to read its code in order to find out what classes should be mocked
+
+{
+And when I say “use constructor injection wherever possible” -->I mean that only 'If you don’t have control over client’s source code', 
+or you don’t instantiate the client yourself 'as is the case with e.g. Activiy',
+}?????????
+should you resolve to dependency injection techniques other than constructor injection.
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+ How does this apply to Android Development
+ ============================================
+
+
+Without Dependency Injection,
+you are limited to using SharedPreference in only files that inherit from Context aka Activity and Fragments because New instance of SharedPreference 'has a dependency' on Context.
+Without getting into MVP  
+we can say that it makes life easy if you extract your application logic including 'data persistence' from Fragments and Activities into 'POJO classes' aka----> Presenters. 
+Since these POJO classes do not have Context,
+
+ How do you get access to SharedPreference which has a dependency on Context ?
+ ---> The answer is Dependency Injection – specifically we use Dagger 2 to inject SharedPreference to any Class that needs it as you will see in the example that follows. 
+So let us take a look at Dagger 2 next
+
+Dagger 2 exposes a number of special annotations:
+======================================================
+
+@Module    ----> for the classes whose methods provide dependencies
+@Provides  ----> for the methods within @Module classes
+@Inject    ----> to request a dependency 'a constructor, a field, or a method'
+@Component ----> is a bridge Interface between modules and injection
+
+
+What Exactly does Dagger 2 Do ?
+=================================
+
+Before we look at what exactly Dagger 2 does, I will like to say that the good thing about Dagger 2 is that 'it is not magical'.
+  Everything it does, at-least the part that you are concerned with is prescriptive. 
+  That means you prescribe to Dagger 2 what goes where 'via annotations'.
+
+  So what does Dagger 2 do?
+                 ---> It is a factory that 'creates and manages your dependency'  for you  'based on your specification'.
+
+Going back to the coffee analogy,
+ Dagger 2 can be likened to a Vending machine that stands near the Bartender and creates New copies of the concrete ingredient needed by the bartender to make coffees
+
+The checklist must be clear for Example :-
+
+ if it specifies that when the recipe calls for 1 table spoon of cream,
+ it should also say what should be the concrete implementation that should be created to satisfy that requirement.
+ Dagger 2 does not make the decision of what object to use to satisfy a dependency for you, that is why I said that it is not magical. 
+ You have to specify that upfront.
+ Let’s see this in an example
+
+
+ In this example we are going to create a Java Class file called ShoppingCart.java, this file is used in an Android 'shopping cart app'. 
+ Part of the work of this ShoppingCart Class file is to remember the items that the users add the shopping cart in case there is a configuration change
+ Example phone call came in before they complete their shopping session by checking out.  
+ In the web there is cookies where this kind of temp information can be stored but in Android we have SharedPreference for such a time like this.
+
+ Since this ShoppingCart.java file is a humble plain old Java object (POJO) we need to use Dagger 2 to inject SharedPreference to it. 
+ Follow the steps below to complete the tutorial
+
+To implement Dagger 2 correctly, you have to follow these steps:
+===================================================================
+
+1.Identify the dependent objects and its dependencies.
+2.Create a Class with the @Module annotation, using the @Provides annotation for every method that returns a dependency.
+3.Request dependencies in your dependent objects using the @Inject annotation.
+4.Create an Interface using the @Component annotation and add the classes with the @Module annotation created in the second step.
+5.Create an object of the @Component Interface to instantiate the dependent object with its dependencies.
+
+
+Dependency analysis is shifted from run time to compile time. 
+--->This means that you are notified of possible problems during the development phase, 
+unlike with other libraries, such as Guice. Before using the Dagger 2 library, 
+you need to ---> prepare your Android Studio installation to access the generated classes.
+
+
+
+
+=======================================================================================================================================================
+Another Section :-
+==================
+
+Dagger is a dependency injector designed for low-end devices.
+ Most dependency injectors rely on 'reflection'---> to create and inject dependencies. 
+ Reflection is awesome, but is very time consuming on low-end devices,
+ and specially on old android versions. 
+
+  Dagger
+
+   uses a 'pre-compiler'---> that creates all the classes it needs to work. That way, no reflection is needed.
+   Dagger is less powerful than other dependency injectors, but it’s the most efficient.
+
+    'reflection'  ---->
+    'pre-compiler'---->
+    'Kotlin'      ---->
+
+
+---What is a dependency?
+=========================
+If we want to inject dependencies, we first need to know what a dependency is.
+ In short, a dependency is a coupling between two 'modules' of our code --->( 'in oriented object languages,two classes').
+ Usually because one of them uses the other to do something.
+
+
+ Why dependencies are dangerous?
+ =================================
+
+Dependencies from high to low level are dangerous because we couple both modules in a way that if we need to change one module with another, 
+we necessarily need to modify the code of the coupled module ~ Clases .
+ That’s really bad if we want to create a 'testable app',
+ Because unit testing requires that when we are testing a module--->it is 'isolated' from the rest of modules in our app.
+  To do this, we need to 'substitute' dependencies with 'mocks'.?????--> Imagine a code like this:
+
+--->Every ‘New’ we write is a hard dependency we probably need to avoid. And no,'writing less modules'--->isn’t a Solution, don’t forget Single Responsibility Principle.
+
+How to solve it  Dependency inversion
+=======================================
+
+If we can’t --->'instantiate modules inside another module',
+ we need to provide those modules in another way. Can you imagine how? Exactly, via ---Constructor---.
+ That is basically what 'dependency inversion' principle means. 
+                                                             ----->'You shouldn’t rely on concrete module objects, only on abstractions'.
+
+Abstractions :-
+-----------------
+OO Abstraction occurs during 'Class level design', with the objective of 'hiding the implementation complexity' of how the the features offered by an API / design / system were implemented,
+in a sense simplifying the 'interface' to access the underlying implementation.
+For example :-
+a Java developer can make use of the high level features of FileInputStream without concern for how it works (i.e. file handles,
+file system security checks, memory allocation and buffering will be managed internally, and are hidden from consumers). 
+This allows the implementation of FileInputStream to be changed, 
+and as long as the API (interface) to FileInputStream remains consistent, code built against previous versions will still work.
+
+-----------------------
+
+Our previous example code would be something like this:
+view sourceprint?
+public class Module1{
+   private Module2 module2;
+
+   public Module1(Module2 module2){
+      this.module2 = module2
+   }
+   public void doSomething(){
+      ...
+      module2.doSomethingElse();
+      ...
+   } 
+}
+
+
+So what’s dependency injection?
+===============================
+You already know! 
+It consists of 'passing dependencies' (inject them) via 'constructor' in order to ---> 'extract the task' of creating modules out from other modules.
+ Objects are instantiated somewhere else and passed as constructor attributes when creating the current object.
+But here it comes a New problem. --->If we can’t create modules inside modules, there must be a place where those modules are instantiated ???
+Besides, if we need to create modules with huge constructors including lots of dependencies, code will become dirty and hard to read,
+ with objects travelling around the inmensity of our app. That’s what a dependency injector solves.
+
+
+ What is a dependency injector?
+ =================================
+We can consider it as another module in our app that is in charge of providing instances of the rest of modules and inject their dependencies.
+ That is basically its duty.
+ the creation of modules is localized in a single point in our app, and we have full control over it.\
+
+
+
+Rule 1: MUST use field injection if I don not control creation of the object (think Activity or Fragment in Android). 
+       If some (non-dagger aware) framework is creating my object and handles it to me I have no choice but to inject it manually after I receive the instance.
+
+Rule 2: MUST use constructor injection if the Class is/may be used in another project that does not use Dagger 2.
+        If the other project(s) do not use Dagger they cannot use DI so the user have to create the object the "old" way using New.
+
+Rule 3: PREFER constructor injection when working with Class hierarchies because it is easier to create unit tests.  ?????--->negotiaple
+
+Adding @Inject to a constructor tells Dagger that it can use that constructor to make the object available on the object graph
+
+But adding @Inject to a method or field merely tells Dagger that as part of the injection process it should populate that field or call that method with the given dependencies
+
+ If you want to make a Dinner available on the object graph, you will need to @Inject-annotate the Dinner constructor,
+  or put a @Provides or @Binds method on a Module that you feed into the Component.
+
+
+  Why would you use this?
+   Consider a Case where objects are created reflectively (e.g. Activities, Fragments,and Views in Android, or Serializable objects), 
+   where you would prefer not to expose @Inject fields. In those cases, 
+   you could work around constructor constraints by having your injection happen on a field.
+   Similarly, though I haven not tried this, you could take advantage of Class hierarchy to mark an Interface method with @Inject,
+   ensuring that whether or not you are in a DI context you can pass certain dependencies to an object as part of their preparation
+
+   Annotating a method with @Inject gives Dagger instructions to execute this method right after the objects creation — right after the constructor call.
+   This is useful when you need a fully constructed object for somethin
+
+
+
+
+
+@Singleton     ---->Class creat once and be attached to ApplicationContext (Not Recomended Create your ownen 'Scope')
+@ActivityScope ---->Class uniqe for every Activity .
+N0 Scope       ---->thing that do not belong to any Scope and being Ceated every time they injected
+
+
+
+
+
+
+
+
+
+
+You do it just the same as when injecting stuff into activities.
+
+Declare a component,
+add the inject method to that component,
+add a module providing your service
+create that components builder
+add your module to the builder
+inject your service with the component
+Your module and component would look something like this (maybe add some scope)
+
+@Module
+class ServiceModule {
+
+    MyService mService;
+
+    ServiceModule(MyService service) {
+        mService = service;
+    }
+
+    @Provides
+    MyService provideMyService() {
+        return mService;
+    }
+}
+
+@Component(modules=ServiceModule.class)
+interface MyServiceComponent {
+    void inject(MyService service);
+}
+Then in onCreate just create your component and inject your alarm.
+
+@Inject
+private SomeAlarm alarm;
+
+public void onCreate() {
+    DaggerMyServiceComponent.builder()
+            .serviceModule(new ServiceModule(this))
+            .build()
+            .inject(this);
+
+    alarm.doStuff();
+}
+This is assuming that your alarm can be constructor injected by having an @Inject annotated constructor like this:
+
+class SomeAlarm {
+    @Inject
+    SomeAlarm(MyService service) {
+        /*constructor stuff*/
+    }
+}
+Else you would just also add the alarm creation to your module.
+
+
+
+
+
+I think the purpose of multiple components is to have different life-cycles. In your second example all these components would live while process is running, even if they are no longer needed. It usually works, because your components are small and phones have lot's of memory, but that's not best way.
+In my case, I use separate component per screen (activity or fragment). Each screen instantiates it's component so it's life-cycle is directly coupled to screen life-cycle.
+
+
+
+
+
+
+
+
+
+-----------------
+Project Gradle (First one)
+---------------------------
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+    }
+
+
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+
+--------------
+App Gradle (Secound one):=
+----------------------
+
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:23.4.0'
+
+
+    compile 'com.google.dagger:dagger:2.8'
+    provided 'javax.annotation:jsr250-api:1.0'
+    compile 'com.google.code.gson:gson:2.6.2'
+
+
+
+    testCompile 'junit:junit:4.12'
+}
+
+----------------------------------------------------------
+
+ 

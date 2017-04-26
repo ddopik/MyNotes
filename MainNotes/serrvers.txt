@@ -1,0 +1,131 @@
+local_host
+192.168.1.200
+realdeal
+Realdeal@1234
+######----------------------------------------------
+(life)
+
+cpanel:alaakamob.ovplatform.tk/member
+server: alaakamob.ovplatform.tk
+user: promozy
+pass: Realdeal@1234
+ramadan.ovplatform.tk
+https://rs18.websitehostserver.net:2083/
+http://ramadan.ovplatform.tk/Mosalsallat/Mosalsallat_panel
+http://ramadan.ovplatform.tk/Mosalsallat/add_series
+http://ramadan.ovplatform.tk/Mosalsallat/add_episode
+-----------------------------------------
+
+ 
+approved----->2
+reject------->1
+piending----->0
+---------------------------------------------
+----------------------------------Wamp configration
+$config['base_url'] = "http://".$_SERVER['HTTP_HOST'];
+short_open_tag = On
+; Allow ASP-style <% %> tags.
+; http://php.net/asp-tags
+asp_tags = On
+
+
+######---------------import sql file
+placed the `nitm.sql` file in `bin` file of the `mysql` folder 
+and used the following syntax.
+cd C:\wamp\bin\mysql\mysql5.6.17\bin>mysql -u root alaaka_front < alaaka_front.sql
+----------------------------------
+
+update `city` set `city_en` = REPLACE(`city_en`,'''''','''') WHERE 1
+
+
+######---------------------------------------
+$$$$(ANT_HOME)
+C:\Program Files\ANT\apache-ant-1.9.7
+path-->%ANT_HOME%\bin;
+---------------------------------------------------------------
+$$$$(JAVA_HOME)
+C:\Program Files\Java\jdk1.8.0_60
+path-->%JAVA_HOME%\bin;
+-----------------------------------------------------------------
+$$$$(ANDROID_HOME)
+C:\Users\ddopik\android-sdks
+path-->%ANDROID_HOME%\platform-tools;%ANDROID_HOME%\tools;
+
+or
+set ANDROID_HOME=C:\android-sdk-windows(recomended)
+set PATH=%PATH%;%ANDROID_HOME%\tools;%ANDROID_HOME%\platform-tools
+
+######------------------------------------------------------------------
+http://stackoverflow.com/questions/26431676/appcompat-v721-0-0-no-resource-found-that-matches-the-given-name-attr-andro
+fix of no variable error
+2...http://stackoverflow.com/questions/4404553/missing-androidmanifest-xml-when-importing-an-old-android-project-into-eclipse
+
+######------
+Instal cordova
+******************
+-->instal node.js
+-->test for node.js by npm -v
+-->npm install -g cordova
+-->cordova --version
+
+1.npm install -g cordova
+2.npm install -g plugman
+3.Cordova create AndroidTest
+4.cordova -d platform add android
+5.cordova build
+
+
+######remove cordova plugin--------
+First, you should list your plugins:
+
+cordova plugin list--->  With this result, you can simply do:
+cordova plugin remove <PLUGIN_NAME>
+-------------------------------------
+
+(((((((((((((((((Full Steps)))))))))))))))))-----Online At--->(((--http://stackoverflow.com/questions/26449512/how-to-create-signed-apk-file-using-cordova-command-line-interface?answertab=active#tab-top--)))
+
+First set packge name in config.xml 
+inside widger attr 
+android-packageName="com.alaaka.androidapp"
+----------------------
+###### Realse APk
+cordova build --release android
+-------------------------------------
+######Generating Key_srore --->in main dir
+keytool -genkey -v -keystore Alaaka.keystore -alias Alaaka -keyalg RSA -keysize 2048 -validity 10000
+-------------------------------------
+######sign the unsigned APK   ----->key and apk_file in the same dir
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore <keystorename <Unsigned APK file> <Keystore Alias name>
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore Alaaka.keystore android-release-unsigned.apk Alaaka   (....do not change alaaka it is an alias for my key).
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ramadan2016.keystore android-release-unsigned.apk ramadan2016  (...... for all mosalsallat ramadan ).
+-------------------------------------
+######Final stage run the zip align tool to optimize the APK:  ----->key and apk_file in the same dir
+zipalign -v 4 android-release-unsigned.apk Alaaka.apk
+--->>>if you have aproblem see this http://stackoverflow.com/questions/24442213/cannot-find-zip-align-when-publishing-app
+-----------------------------------------------
+###### common problem
+$ cordova telemetry on
+--------------------------------------------------
+###### cordova adMob
+1.https://github.com/floatinghotpot/cordova-admob-pro/wiki/01.-How-to-Use-with-Cordova-CLI
+2.http://www.googleadservices.com/pagead/aclk?sa=L&ai=CD8iBY8dWV-PaEYSU7gbazKfoCerarptEscDVhYsDgazRxM4FCAAQASDJmKILYLP-0IL0LaABuYPu_QPIAQGqBCZP0JKAFGgbda-KHC4hqRqfoIArJ97Uojc0aBQMgOdEWk3r8GnNg4AFkE6IBgGAB6_8kQKIBwGQBwKoB6a-G9gHAQ&ohost=www.google.com.eg&cid=CAESIuD2fjmaBjgUdX3Lih9MGeT0h2j3f5cqeePqVAJoEiksCik&sig=AOD64_2AdQzccZzoTzmW13FqhFYbz76bsw&clui=0&q=&ved=0ahUKEwi3zaSf_pXNAhWBhRoKHblcDHIQ0QwIGA&adurl=https://github.com/sunnycupertino/cordova-plugin-admob-simple
+--------------------------------------------------
+#####common problem_2
+for some reason app wont't be debug try to run----> $ cordova clean ___ in ./platforms/android/ folder
+and build your project again,
+--------------------------------------------------
+
+--------------------------------------------------------
+1.Inapp plugin
+cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-inappbrowser.git
+---
+2.splash screen plugin
+cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-splashscreen.git
+---
+3.network plugin
+cordova plugin add cordova-plugin-network-information
+---
+cordova plugin add cordova-plugin-network-information
+
+
+----==

@@ -1,0 +1,10 @@
+What is a reference in Java ?
+============================
+
+
+Strong reference ---->strong references are the ordinary references in Java. 
+                  ex---MyObject object = new MyObject();
+
+
+
+

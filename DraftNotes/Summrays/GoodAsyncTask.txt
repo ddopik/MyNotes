@@ -1,0 +1,51 @@
+Here is my Activity:
+
+public class MainActivity extends Activity {
+  private MyAsyncTask task;
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    task = new MyAsyncTask();
+    task.setListener(createListener());
+    task.execute();
+  }
+  @Override
+  protected void onDestroy() {
+    task.setListener(null);
+    super.onDestroy();
+  }
+  private MyAsyncTask.Listener createListener() {
+    return new MyAsyncTask.Listener() {
+      @Override
+      public void onSuccess(Object object) {
+        // adapt contents
+      }
+    };
+  }
+}
+
+
+And here is the AsyncTask:
+
+class MyAsyncTask extends AsyncTask {
+  private Listener listener;
+  @Override
+  protected Object doInBackground(Object[] params) {
+    return doSomeStuff();
+  }
+  private Object doSomeStuff() {
+    //do something to get result
+    return new Object();
+  }
+  @Override
+  protected void onPostExecute(Object object) {
+    if (listener != null) {
+      listener.onSuccess(object);
+    }
+  }
+  public void setListener(Listener listener) {
+    this.listener = listener;
+  }
+  interface Listener {
+    void onSuccess(Object object);
+  }

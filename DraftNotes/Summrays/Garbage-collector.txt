@@ -1,0 +1,21 @@
+
+
+
+Traditional memory leaks ---> occur when you neglect to free allocated memory before all related references go out of scope. 
+
+Logical memory leaks     ---> result of forgetting to release references of objects that are no longer needed in your app. 
+								If a strong reference to an object still exists, the garbage collector cannot remove the object from memory.
+								This is particularly problematic in Android development if you happen to leak a Context. 
+								This is because Contexts such as Activities contain many references to large amounts of memory.
+
+
+The onDestroy() method of an Activity :-
+is called at end-of-life and indicates that it is being destroyed either through programmer intention or because Android needs to recuperate some memory.								
+
+Potential memory leaks revolve around two fundamental situations :-
+=====================================================================
+ The first memory-leak-category is caused by a process-global static object that exists regardless of the app’s state and maintains a chain of references to the Activity
+The other category is caused when a thread that outlasts the Activity’s lifetime neglects to clear a strong reference chain to that Activity. Let’s examine a few different ways that you might come across these situations.
+
+
+

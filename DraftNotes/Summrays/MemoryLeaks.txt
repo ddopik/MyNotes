@@ -1,0 +1,85 @@
+
+Memory Leaks:-===
+==================
+Traditional memory leaks--->Occur when you neglect to free allocated memory before all related references go out of scope
+Logical memory leaks    --->Result of forgetting to release references to objects that are no longer needed in your app. 
+
+ if you happen to leak a Context--->This is because Contexts such as Activities contain many references to large amounts of memory,
+ i.e. view hierarchies and other resources. If you leak a Context, you are also leaking everything that it points to. 
+
+ it is not safe to hold a reference to the object if it ends up being an Activity or a Service
+
+
+Example:-
+What happens when the Activity is destroyed?
+The AsyncTask is holding a reference to the Activity,
+and the Activity cannot be collected by the GC. This is what we called a memory leak.
+
+
+The AsyncTask will be created and executed together with the Activity onCreate() method.
+But here we have a problem: the inner Class needs to be accessing the outside Class during its entire lifetime.
+
+What happens when the Activity is destroyed ?
+The AsyncTask is holding a reference to the Activity, and the Activity cannot be collected by the GC. This is what we called a 'memory leak'.
+
+
+
+WeakReference---->A weak reference is a reference not strong enough to keep the object in memory. 
+If we try to determine if the object is strongly referenced and it happened to be through WeakReferences,
+the object 'will be garbage-collected'. For terms of understanding, 
+ 
+ Ex:
+
+ public class MainActivity extends Activity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        new MyAsyncTask(this).execute();
+    }
+    private static class MyAsyncTask extends AsyncTask {
+        private WeakReference<MainActivity> mainActivity;    
+        
+        public MyAsyncTask(MainActivity mainActivity) {   
+            this.mainActivity = new WeakReference<>(mainActivity);            
+        }
+
+                @Override
+        protected Object doInBackground(Object[] params) {
+            return doSomeStuff();
+        }
+        private Object doSomeStuff() {
+            //do something to get result
+            return new Object();
+        }
+        @Override
+        protected void onPostExecute(Object object) {
+            super.onPostExecute(object);
+            if (mainActivity.get() != null){
+                //adapt contents
+            }
+        }
+    }
+}
+
+--->{
+private WeakReference<MainActivity> mainActivity;
+What will happen here? When the Activity stops existing, since it is hold through the means of a WeakReference, it can be collected. Therefore no memory leaks will happen.
+}///////
+
+
+
+SoftReference----> think of a SoftReference as a stronger WeakReference. Whereas a WeakReference will be collected immediately,
+ SoftReference will beg to the GC to stay in memory unless there is no other option. 
+ The Garbage Collector algorithms are really thrilling and something you can dive in for hours and hours without getting tired.
+ But basically, they say “I will always reclaim the WeakReference. If the object is a SoftReference, I will decide what to do based on the ecosystem conditions”. 
+ This makes a SoftReference very useful for the implementation of a cache: as long as the memory is plenty, we do not have to worry of manually removing objects. 
+
+
+ PhantomReference---->Ah, PhantomReferences! I think I can count on the fingers of one hand how often I saw them used in a production environment.
+  An Object that has only being referenced through a PhantomReference them can be collected whenever the Garbage Collector wants. No further explanations,
+  no “call me back”. This makes it hard to characterise. Why would we like to use such a thing? Are the other ones not problematic enough?
+  Why did I choose to be a programmer? PhantomReference can be used exactly to detect when an object has been removed from memory. Being fully transparent,
+  I recall two occasions when I had to use a PhantomReference in my entire professional career. So do not get stressed if they are hard to understand now.
+
+
+  Using non-static inner classes for long running operations is always a bad practice, not just in Android.

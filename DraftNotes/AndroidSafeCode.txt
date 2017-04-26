@@ -1,0 +1,19 @@
+Note that it is important to save persistent data in onPause() instead of onSaveInstanceState(Bundle) because the later is not part of the lifecycle callbacks,
+so will not be called in every situation as described in its documentation.onSaveInstanceState() for transient data (restored in onCreate()/onRestoreInstanceState()), onPause() for persistent data (restored in onResume()). From Android technical resources:
+
+onSaveInstanceState():-
+is called by Android if the Activity is being stopped and may be killed before it is resumed! This means it should store any state necessary to re-initialize to the same condition when the Activity is restarted.
+It is the counterpart to the onCreate() method,
+and in fact the savedInstanceState Bundle passed in to onCreate() is the same Bundle that you construct as outState in the onSaveInstanceState() method.
+----
+Vs--
+----
+onPause() and onResume() :-
+are also complimentary methods. onPause() is always called when the Activity ends, 
+even if we instigated that (with a finish() call for example).
+We will use this to save the current note back to the database.
+Good practice is to release any resources that can be released during an onPause() as well, 
+to take up less resources when in the passive state.
+
+
+==============================================================================

@@ -1,0 +1,151 @@
+﻿###########################################____PHP_____################################3
+
+
+$this->db->query("update `eposide` set `eposide_link` = REPLACE(`eposide_link`,'width=\"560\"','width=\"100%\"') WHERE 1");
+
+
+ var start_url='http://ramadan.ovplatform.tk/Mosalsallat/my_eposide/5?rev_btn=true';
+ var default_url='http://ramadan.ovplatform.tk/Mosalsallat/my_eposide/5?rev_btn=true';
+ var app_name='مسلسل نيللى وشريهان';
+ function loadDoc() {
+
+    console.log("function start");
+  var xhttp = new XMLHttpRequest();  //create obj
+  xhttp.onreadystatechange = function() {   //test for server ready and wait for respond ->then activate parser function
+    if (xhttp.readyState == 4 && xhttp.status == 200) {  /////// server call_back	
+	
+    myFunction(xhttp);     // if true processe  ->>>>that is my action 
+    }
+  };
+  xhttp.open("GET",start_url, true); //set  type
+  xhttp.send();  //send
+}
+
+
+
+function myFunction(xml) {   ///// if true processe
+    console.log("function called");
+  var i;
+  
+  var xmlDoc = xml.responseText;  //	get the response data as XML data     
+  document.getElementById("app").innerHTML =xmlDoc;
+     var elmnt = document.getElementById("my_body");
+    elmnt.scrollLeft =0;
+    elmnt.scrollTop =0;
+    
+}
+
+document.addEventListener('click', function (event) {
+	event.preventDefault();     
+	start_url=event.target.href;
+	if(start_url==undefined)
+	{
+ 
+ $('a').on('click', function(){
+  start_url=$(this).attr("href");   
+  console.log("false to get href/////" +" url is :"+ start_url);
+  loadDoc(start_url);  
+});     
+	}
+	loadDoc(start_url);  
+   
+}, true);
+
+
+
+document.addEventListener("deviceready", onDeviceReady, false);
+ function onDeviceReady()
+ { 
+ 
+/////////////////////////////
+ if(( /(ipad|iphone|ipod|android|windows phone)/i.test(navigator.userAgent) )) {
+    document.addEventListener('deviceready', initApp, false);
+} else {
+    initApp();
+}    //////ads handler
+///////////////////////////// 
+ if(conn_ch=='Unknown connection' || conn_ch=='No network connection')
+ {
+    alert('please check your intermet conniction');
+    navigator.app.exitApp();
+ }
+ 
+
+
+var conn_ch=checkConnection(); 
+var ref;
+var device_id = device.serial;
+ 
+document.addEventListener("backbutton",check_exit_app, false);
+function check_exit_app()
+{
+	
+if(start_url==default_url)
+{
+	
+	exit_app();
+}
+else
+{
+	start_url=default_url;
+	loadDoc(start_url);
+}
+	
+}
+
+		 function exit_app() ////////inapp exit
+   {
+	       
+    var conf=confirm("exitting "+app_name);
+ if(conf==true)
+	 {
+	 navigator.app.exitApp();
+	 }
+		 else
+		 {
+           
+		 loadDoc(start_url);
+		 }
+		 
+    }	
+
+	
+ 
+	
+}
+
+
+function append_device_id()
+{	
+var pathname = window.location.pathname; // Returns path only			
+}
+function checkConnection() {
+	var networkState = navigator.connection.type;
+
+	var states = {};
+	states[Connection.UNKNOWN]  = 'Unknown connection';
+	states[Connection.ETHERNET] = 'Ethernet connection';
+	states[Connection.WIFI]     = 'WiFi connection';
+	states[Connection.CELL_2G]  = 'Cell 2G connection';
+	states[Connection.CELL_3G]  = 'Cell 3G connection';
+	states[Connection.CELL_4G]  = 'Cell 4G connection';
+	states[Connection.CELL]     = 'Cell generic connection';
+	states[Connection.NONE]     = 'No network connection';
+	return  states[networkState];
+            
+        }
+function show_image(src, width, height, alt) {
+    var img = document.createElement("img");
+    img.src = src;
+    img.width = width;
+    img.height = height;
+    img.alt = alt;
+
+    // This next line will just add it to the <body> tag
+    document.body.appendChild(img);
+}
+
+-------------------------------------------------------------------------------------
+//        if (strpos($string, '%') !== false) {
+//  //PERCENT SIGN FOUND
+//}
