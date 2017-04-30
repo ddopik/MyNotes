@@ -1,8 +1,8 @@
---->Thread safe . ####
---create app using MVP ####
---dagger 2 ####
---depandancy injections ####
---knif ####
+--->Thread safe  ####
+--Dreate app using MVP ####
+--Dagger 2 ####
+--Depandancy injections #### 
+--Knif ####
 --UI/develop best Pracrices #####
 --how to develope buteful UI ####
 --->abstraction is the theory and dependencies are the practice. #####
@@ -19,11 +19,11 @@
 --->AndroidAnnotatios
 --apply Broadcast Reciver
 --Read design pattern book
---learn fireBase
---apply project in fire base
+--learn FireBase
+--apply project in Fire base
 --Bit Map Programming 
 --GCM 
 --Web Sockets 
 --Eventbus 
 --PubNub 
---Recycler cursur adapter
+--RecyclerCursur adapter
