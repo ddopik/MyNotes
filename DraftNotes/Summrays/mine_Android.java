@@ -2,10 +2,7 @@ My_android_notes
 C:\Users\ddopikMain\AppData\Local\Android
 C:\Users\ddopikMain\AppData\Local\Android\sdk\extras\google\usb_driver
 -----------Drafts--------------------------------------------------------------------------------------
-https://api.themoviedb.org/3/movie/top_rated?api_key=61b43cea1b1dc0726b2c14fcce079ffe
-http://api.themoviedb.org/3/movie/157336/reviews?api_key=61b43cea1b1dc0726b2c14fcce079ffe  //single Move Rev
-http://api.themoviedb.org/3/movie/157336/videos?api_key=61b43cea1b1dc0726b2c14fcce079ffe //singleMovie vedio
-http://api.themoviedb.org/3/movie/157336?api_key=61b43cea1b1dc0726b2c14fcce079ffe  //single Movie Deatails
+ 
 
 adb -d shell "run-as com.example.new_one ls /data/data/com.example.new_one/databases"
 

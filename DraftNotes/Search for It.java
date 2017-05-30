@@ -27,3 +27,4 @@
 --Eventbus 
 --PubNub 
 --RecyclerCursur adapter
+--Plurals

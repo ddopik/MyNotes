@@ -178,6 +178,7 @@ git remote set-url origin http://github.com/ddopik/Android-Lib/tree/AppRefactor_
 so git understands that you want to push up current HEAD and not the master branch.
 
 git remote add origin https://github.com/ddopik/Android-Lib/tree/AppRefactor_Dagger
+git remote add origin https://github.com/ddopik/Numuu.git
 git remote set-url origin https://github.com/ddopik/Android-Lib
 git config --global user.email "ddopik.01@gmail.com"
 git config --global user.name "ddopik"

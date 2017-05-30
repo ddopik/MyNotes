@@ -24,3 +24,5 @@ composite    ----> مركب
 upon which   ----> التى تقوم عليها
 cutting edge at the time ----> احدث حاجه فى الوقت ده 
 advocated    ---->دافع عن أو يؤيد
+be it        ---->سواء كان ذلك
+Whereas      ---->بينما
