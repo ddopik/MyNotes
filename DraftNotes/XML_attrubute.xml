@@ -7,7 +7,7 @@ android:layout_top="@+id/textView8"
 android:layout_alignLeft="@+id/trainers"
 android:layout_alignParentRight="@+id/trainers"
 
-android:layout_centerInParent="true" 
+
 android:layout_alignParentStart="true"
 android:layout_alignParentEnd="true"
 android:layout_alignParentRight="true"
@@ -17,7 +17,7 @@ android:layout_gravity="top|center_vertical"
 android:layout_toRightOf="@+id/progressBar"
 android:layout_alignBottom="@+id/imageView8"
 android:layout_alignBaseline="@+id/div"
-in parenr android:weightSum="5" ----- and set in child android:layout_weight="1"
+in parenr android:weightSum="5" ----- and setin child android:layout_weight="1"
 
  />
     </TextView>
@@ -62,7 +62,12 @@ android:stretchMode="columnWidth"  ///for grid view
 
 
     --------------------------------------------
+Automatic popping up keyboard on start Activity Stop
 
--------------------------------
+android:focusable="true"
+android:focusableInTouchMode="true"
+ 
+I have several implementations described here, but now i have added into the AndroidManifest.xml for my Activity the property:
+android:windowSoftInputMode="stateAlwaysHidden"
 
-----------------------------------
+-----------------------------------------------------------------------------

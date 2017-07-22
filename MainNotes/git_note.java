@@ -184,5 +184,5 @@ git config --global user.email "ddopik.01@gmail.com"
 git config --global user.name "ddopik"
 
 Change your remote URL from SSH to HTTPS with the git remote set-url command.
-git remote set-url origin http://github.com/ddopik/Android-Lib/tree/AppRefactor_Dagger
+git remote set-url origin http://github.com/ddopik/Android-Lib/tree/NewsApp2
 

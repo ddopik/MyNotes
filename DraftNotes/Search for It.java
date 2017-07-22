@@ -14,6 +14,7 @@
 --->Butter knife or RoboGuice or Dagger 2 #####
 --->Recycler cursur adapter ####
 
+--->Compile Time AndroidAnnotatios
 --->Data Binding liberary 
 --->RoboGuice
 --->AndroidAnnotatios
@@ -28,3 +29,10 @@
 --PubNub 
 --RecyclerCursur adapter
 --Plurals
+
+
+what is this 
+getActivity().onBackPressed();
+ft.addToBackStack(null);   // ft is FragmentTransaction
+getActivity().getSupportFragmentManager().popBackStack();
+C:\Users\ddopi\Desktop\NewsApp_key.jks
