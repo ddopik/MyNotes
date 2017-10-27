@@ -1,0 +1,43 @@
+Reactive programming===
+========================
+
+
+ ---Reactive programming is all about responding to value changes.
+
+ In the Observer pattern
+   you have objects that implement two key RxJava interfaces: Observable and Observer. 3
+   When an Observable changes state, all Observer objects subscribed to it are notified.
+
+   No more items can be emitted after an observable has completed. it`s  an example of a misbehaving observable that violates the Observable contract
+
+
+---The Observer pattern done right. ReactiveX is a combination of the best ideas from the Observer pattern, the Iterator pattern, and functional programming
+---RxJava is the Java implementation of this concept. 
+
+
+The build blocks for RxJava code are the following:-
+====================================================
+
+1--observables representing sources of data
+
+2--subscribers (or observers) listening to the observables
+
+3--a set of methods for modifying and composing the data
+
+4--An observable emits items; a subscriber consumes those items
+
+
+
+Why doing asynchronous programming
+=======================================
+Reactive programming provides a simple way of 'asynchronous programming'. 
+At its core, RxJava simplifies development because it raises the level of abstraction around threading
+as a developer you don’t have to worry too much about the details of how to perform operations that should occur on different threads
+
+This allows to simplify the asynchronously processing of potential long running operations. 
+--It also provides a defined way of handling multiple events,errors and termination of the event stream.
+-- Reactive programming provides also a simplified way of running different tasks in different threads.
+         For example, widgets in SWT and Android have to be updated from the UI thread and reactive programming provides ways to run observables and subscribers in different threads.
+
+It is also possible to convert the stream before its received by the observers. 
+And you can chain operations, e.g., if a API call depends on the call of another API Last but not least, reactive programming reduces the need for state variables, which can be the source of errors.

@@ -1,4 +1,5 @@
-﻿Explicitly    ----> بشكل صريح
+﻿emits ---->يبعث 
+Explicitly    ----> بشكل صريح
 Implicitly    ----> بشكل ضمني
 tendency      ----> ميل 
 prospective   ----> محتمل
@@ -26,3 +27,8 @@ cutting edge at the time ----> احدث حاجه فى الوقت ده
 advocated    ---->دافع عن أو يؤيد
 be it        ---->سواء كان ذلك
 Whereas      ---->بينما
+concise      ---->مختصر
+suffice      ---->تكفى
+anticipate   ---->توقع
+derange      ---->يعوق
+notorious    ---->سىء  السمعه

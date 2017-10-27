@@ -15,9 +15,9 @@
 --->Recycler cursur adapter ####
 
 --->Compile Time AndroidAnnotatios
---->Data Binding liberary 
---->RoboGuice
 --->AndroidAnnotatios
+--->Data Binding liberary  #####
+--->RoboGuice
 --apply Broadcast Reciver
 --Read design pattern book
 --learn FireBase
@@ -25,7 +25,7 @@
 --Bit Map Programming 
 --GCM 
 --Web Sockets 
---Eventbus 
+--Eventbus #####
 --PubNub 
 --RecyclerCursur adapter
 --Plurals

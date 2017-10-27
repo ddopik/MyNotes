@@ -36,7 +36,9 @@
 19-git push origin (null""):[name_of_your_new_branch] --->delete branch in gethip
 20--git fetch [name_of_your_remote] --->Update your branch when the original branch from official repository has been updated
     ----git fetch --all --->useful for seeing New remote branches
-21--->git clean--->To delete all untracked files and then continue with usual git pull
+21--git clean--->To delete all untracked files and then continue with usual git pull
+22--git push -d <remote_name> <branch_name> --->to delete A remote Branch 
+23--git branch -d branch_name               --->to delete A local branch  
 ----------------------------------------------------------------------------------------
 git fetch <remote>
 Fetch all of the branches from the repository. 
@@ -157,32 +159,47 @@ Make an existing Git branch track a remote branch?---
 ----------------------------------------------------------------------------------------------
 http://stackoverflow.com/questions/520650/make-an-existing-git-branch-track-a-remote-branch?rq=1
 ------------------------------------------------------------
+To fetch a branch, you simply need to:---
+------------------------------------------------------------
+
+git fetch origin
+This will fetch all of the remote branches for you. You can see the branches available for checkout with:
+
+git branch -v -a
+With the remote branches in hand, you now need to check out the branch you are interested in, giving you a local working copy:
+
+git checkout -b test origin/test
+
+
 
 ========================================================================================================
 Often needs:
 ~~~~~~~~~~~~
 
-Change your remote URL from SSH to HTTPS with the git remote set-url command.
-git remote set-url origin http://github.com/ddopik/Android-Lib/tree/AppRefactor_Dagger
+
 
 --git checkout <commit-hash>    --->you could checkout all files more easily 
 --git checkout <commit-id> <filename>  ---> got the files  wanted back from the old commit file
 --git merge [branch]     --->Combines the specified branch’s history into the current branch
---	
- <branch-name> --->push localBranch to remot bransh (note that is push not ovveride)
+
+--<branch-name> --->push localBranch to remot bransh (note that is push not ovveride)
+
 --git reset --hard     --->this will  discard all changes you made for file and will not ask you to commit them
                        --->and will return your file to the last commit
                        It might be the case that you are on another branch than the master branch, then type:
 
 --->git push origin HEAD:master
-so git understands that you want to push up current HEAD and not the master branch.
+    so git understands that you want to push up current HEAD and not the master branch.
 
 git remote add origin https://github.com/ddopik/Android-Lib/tree/AppRefactor_Dagger
-git remote add origin https://github.com/ddopik/Numuu.git
-git remote set-url origin https://github.com/ddopik/Android-Lib
 git config --global user.email "ddopik.01@gmail.com"
 git config --global user.name "ddopik"
 
-Change your remote URL from SSH to HTTPS with the git remote set-url command.
-git remote set-url origin http://github.com/ddopik/Android-Lib/tree/NewsApp2
+--->Change your remote URL from SSH to HTTPS with the git remote set-url command.
+    git remote set-url origin http://github.com/ddopik/Android-Lib/tree/NewsApp2
+ 
+
+--->If you want to create a new branch to retain commits you create, you may
+   do so (now or later) by using -b with the checkout command again. Example:
+   git checkout -b <new-branch-name>
 

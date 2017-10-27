@@ -4,29 +4,24 @@ Generating SSh key :-
 
 ---->keytool -genkey -v -keystore my-release-key.keystore -alias friend_point_key_store -keyalg RSA -keysize 2048 -validity 10000
 keytool -exportcert -alias androiddebugkey -keystore %HOMEPATH%\.android\debug.keystore | openssl sha1 -binary | openssl base64
-Google-Maps Api Key--->AIzaSyAl0-mByOyUIgHE04iEcY0yHJDMLJtPHrg
 
-                           keytool -exportcert -alias "NewsApp_FaceBook_Key" -keystore "D:\my_private_key.keystore" | openssl sha1 -binary | openssl base64
+keytool -list -keystore my_private_key.keystore
+                                          ####----->keytool -exportcert -alias androiddebugkey -keystore ~/Desktop/release.keystore | openssl sha1 -binary | openssl base64 
  
  how to generate a development key hash   ####----->keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64                                                   
                                                       
  how to generate a release key hash       ####------>keytool -exportcert -alias YOUR_RELEASE_KEY_ALIAS -keystore YOUR_RELEASE_KEY_PATH | openssl sha1 -binary | openssl base64                                               
-                                          ####------>keytool -exportcert -alias NewsApp_FaceBook_Key -keystore D:\my_private_key.keystore | openssl sha1 -binary | openssl base64 
+                                          ####------>keytool -exportcert -alias NewsApp_FaceBook_Key -keystore E:\my_private_key.keystore | openssl sha1 -binary | openssl base64 
 
 
-
-et OPENSSL_CONF=C:\Program Files (x86)\openssl-0.9.8k_X64\openssl.cnf
+Order/FormatCode (Android studio): control + alt + L
+Order/FormatCode (Net Beans): alt + shift + f
+ 
 =================================================================
 Android Draft`s
 ==================
-List<Map<String,String>> mapList = new ArrayList<Map<String,String>>();
-Map<String,String>> map1 = new HashMap<String,String>();
-map1.put("food", "pizza");
-Map<String,String>> map2 = new HashMap<String,String>();
-map2.put("drink", "coke");
-Collections.addAll(mapList, map1, map2);
-
-...
+ 
+ 
 
 for (Map<String,String> map : mapList) {
     System.out.println("food is " + map.get("food"));
@@ -161,68 +156,4 @@ or return boolean type and the second and third arguments must return values com
  You can never use a void method as an argument to the ? : operator.
 
 
-
- apply plugin: 'com.android.application'
-apply plugin: 'realm-android'
-android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
-    defaultConfig {
-        applicationId "com.example.ddopi.numuu"
-        minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    sourceSets {
-        main {
-            res.srcDirs =
-                    [
-                            'src/main/res/layouts/view_pager_section',
-                            'src/main/res/layouts',
-                            'src/main/res'
-                    ]
-        }
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-
-    ///FaceBook Sdk
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-
-////ButterKnif
-    compile 'com.jakewharton:butterknife:8.6.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
-
-    ///stetho
-    // compile 'com.uphyca:stetho_realm:0.9.0'
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'com.facebook.stetho:stetho:1.4.1'
-    compile 'com.uphyca:stetho_realm:2.0.0'
-    ////
-///Volly
-    compile 'com.android.volley:volley:1.0.0'
-    ///
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.google.dagger:dagger:2.8'
-    compile 'com.google.code.gson:gson:2.6.2'
-    compile 'com.android.support:support-v4:25.3.0'
-    testCompile 'junit:junit:4.12'
-    provided 'javax.annotation:jsr250-api:1.0'
-    testCompile 'junit:junit:4.12'
-}
+ 
